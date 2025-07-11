@@ -30,7 +30,7 @@ class SmsService
         );
             return true;
         } catch (\Exception $e) {
-          throw new \Exception("Erreur lors de l'envoi du SMS: " . $e->getMessage());
+          throw new \Exception("Erreur lors de l'envoi du sms: " . $e->getMessage());
           exit;
             
         }

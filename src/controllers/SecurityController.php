@@ -70,7 +70,7 @@ class SecurityController extends AbstractController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') 
         {
             $rules = [
-                'nom' => ['required'=>''],
+                'nom' => ['required'],
                 'prenom' => ['required'],
                 'numero_cni' => ['required', 'unique:user,numero_cni' ,'length:13'],
                 'numero_telephone' => ['required', 'phone', 'unique:compte,telephone'],

@@ -13,7 +13,7 @@ $routes = [
     'client/dashboard'=>[
         'controller' => 'App\Controllers\UserController',
         'action' => 'index',
-       
+        
     ]
     
 ];

@@ -1,7 +1,8 @@
 <?php
 namespace App\Core;
 
-class App{
+class App
+{
    
     private static array $dependencies = [
 
@@ -23,6 +24,7 @@ class App{
         'repositories'=>[
             \App\Repositories\UserRepository::class,
             \App\Repositories\CompteRepository::class,
+            
             
         ],
 

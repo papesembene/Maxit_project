@@ -47,7 +47,6 @@ class Validator
             $ruleName = $rule;
             $params = [];
         }
-
         return [$ruleName, $params];
     }
 
@@ -72,7 +71,7 @@ class Validator
         }
         [$table, $column] = $params;
 
-        // Exemple simple : récupérer repository depuis table (adapter selon ton app)
+        
         $repositoryClass = "App\\Repositories\\" . ucfirst($table) . "Repository";
 
         if (!class_exists($repositoryClass)) {

@@ -5,11 +5,19 @@ namespace App\Core\Middlewares;
 
 class Auth
 {
-    /**
-     * Vérifie si l'utilisateur est connecté
-     */
+    
     public static function isAuthenticated(): bool
     {
         return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
     }
+
+ public function __invoke()
+ {
+        if (!self::isAuthenticated()) {
+            header('Location: /');
+            exit;
+        }
+    }
+
+    
 }

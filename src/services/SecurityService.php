@@ -18,6 +18,7 @@ class SecurityService
     private function __construct()
     {
         $this->db = App::getDependencie('DataBase')->connect();
+       
         $this->userRepository = App::getDependencie('UserRepository');
         $this->compteRepository = App::getDependencie('CompteRepository');
     }
@@ -51,9 +52,9 @@ class SecurityService
             $user->setId($userId);
             $compte->setUser($user);
             
-           
             $compteResult = $this->compteRepository->insert($compte);
-            if (!$compteResult) {
+            if (!$compteResult) 
+            {
                 $this->db->rollBack();
                 return false;
             }

@@ -35,7 +35,7 @@ class SecurityController extends AbstractController
         {
             $rules = [
                 'telephone' => ['required', 'length:9', 'phone'],
-                'password' => ['required','length:6'],
+                'password' => ['required','length:6,8'],
             ];
           
             $validator = Validator::make($_POST, $rules);

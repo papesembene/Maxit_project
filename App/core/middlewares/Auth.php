@@ -1,23 +1,26 @@
 <?php
 namespace App\Core\Middlewares;
-
-
+use App\Core\Session;
+use App\Core\App;
 
 class Auth
 {
-    
-    public static function isAuthenticated(): bool
+    public function __invoke()
     {
-        return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
-    }
+        try {
+            $session = App::getDependencie('session');
+            
+            if (!$session->get('user')) {
+              
+                header('Location: /');
+                exit;
+            }
 
- public function __invoke()
- {
-        if (!self::isAuthenticated()) {
+            return true;
+        } catch (\Exception $e) {
+          
             header('Location: /');
             exit;
         }
     }
-
-    
 }

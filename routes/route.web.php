@@ -10,10 +10,12 @@ $routes = [
         'controller' => 'App\Controllers\SecurityController',
         'action' => 'login',
     ],
-    'client/dashboard'=>[
+    
+    'client/dashboard' => [
         'controller' => 'App\Controllers\UserController',
         'action' => 'index',
-        
+        'middleware' => ['auth']
     ]
-    
 ];
+
+return $routes;

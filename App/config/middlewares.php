@@ -1,10 +1,7 @@
 <?php
 
-namespace App\config;
 use App\Core\Middlewares\Auth;
 
-$middlewares = [
+return [
     "auth" => Auth::class
 ];
-
-return $middlewares;

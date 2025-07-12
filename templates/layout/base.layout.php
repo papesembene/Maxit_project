@@ -3,78 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Mr Sam's</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Portefeuille Mobile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
-        .sidebar-bg {
-            background-color: #1a1a1a;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .orange-bg {
-            background-color: #ff6b35;
-        }
-        .orange-text {
-            color: #ff6b35;
-        }
-        .main-bg {
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: #f5f5f5;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
         }
-        .card-bg {
-            background-color: #e8e8e8;
+
+        .sidebar {
+            width: 200px;
+            background-color: #1a1a1a;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            background-color: #ff8c00;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-name {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .sidebar-button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .sidebar-button:hover {
+            background-color: #444;
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-link {
+            color: #ff8c00;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            background-color: #f5f5f5;
+            overflow-y: auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 45px;
+            border: none;
+            border-radius: 12px;
+            background-color: #e5e5e5;
+            font-size: 14px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .menu-button {
+            width: 48px;
+            height: 48px;
+            background-color: #ff8c00;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .balance-arrows {
+            display: flex;
+            gap: 8px;
+        }
+
+        .arrow {
+            color: #ff8c00;
+            font-size: 18px;
+        }
+
+        .balance-type {
+            background-color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #ff8c00;
+            border: 1px solid #ff8c00;
+        }
+
+        .balance-amount {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .currency-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ff8c00;
+        }
+
+        .balance-link {
+            color: #ff8c00;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .transactions-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .transactions-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .see-more {
+            color: #ff8c00;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .transactions-list {
+            background-color: white;
+            border-radius: 12px;
+            padding: 16px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
         .transaction-item {
-            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #666;
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .transaction-amount-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .transaction-amount {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .transaction-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .badge-envoi {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+
+        .badge-reception {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .badge-paiement {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-retrait {
+            background-color: #fff3e0;
+            color: #f57c00;
         }
     </style>
 </head>
-<body class="flex h-screen">
-    <!-- Sidebar -->
-    <div class="sidebar-bg w-64 p-6 flex flex-col">
-        <!-- Profile Section -->
-        <div class="flex items-center mb-8">
-            <div class="orange-bg w-12 h-12 rounded-full flex items-center justify-center mr-3">
-                <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
-                </svg>
+<body>
+    <div class="sidebar">
+        <div class="profile">
+            <div class="profile-avatar">
+                <i class="bi bi-person-fill"></i>
             </div>
-            <span class="text-white text-lg font-medium">Mr sam's</span>
+            <div class="profile-name">Mr sam's</div>
         </div>
-
-        <!-- Account Switcher -->
-        <div class="mb-6">
-            <button class="flex items-center justify-between w-full px-4 py-2 text-white border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors">
-                <span>Changer de compte</span>
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-                </svg>
-            </button>
-        </div>
-
-        <!-- New Account Button -->
-        <div class="mb-auto">
-            <button class="flex items-center justify-between w-full px-4 py-2 text-white border border-gray-600 rounded-lg hover:bg-gray-800 transition-colors">
-                <span>Nouveau Compte</span>
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
-                </svg>
-            </button>
-        </div>
-
-        <!-- Bottom Menu -->
-        <div class="space-y-4">
-            <a href="#" class="flex items-center text-white hover:orange-text transition-colors">
-                <svg class="w-5 h-5 mr-3 orange-text" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
-                </svg>
-                <span>settings</span>
+        
+        <button class="sidebar-button">
+            <i class="bi bi-chevron-down"></i>
+            Changer de compte
+        </button>
+        
+        <button class="sidebar-button">
+            <i class="bi bi-plus"></i>
+            Nouveau Compte
+        </button>
+        
+        <div class="sidebar-bottom">
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-gear"></i>
+                settings
             </a>
-            <a href="#" class="flex items-center text-white hover:orange-text transition-colors">
-                <svg class="w-5 h-5 mr-3 orange-text" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
-                </svg>
-                <span>deconnexion</span>
+            <a href="#" class="sidebar-link">
+                <i class="bi bi-box-arrow-right"></i>
+                deconnexion
             </a>
         </div>
     </div>
-        <?= $content; ?>
-    </body>
+
+    <div class="main-content">
+        <?php echo $content; ?>
+
+
+</body>
 </html>

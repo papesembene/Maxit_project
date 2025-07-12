@@ -18,7 +18,6 @@ class SecurityService
     private function __construct()
     {
         $this->db = App::getDependencie('DataBase')->connect();
-       
         $this->userRepository = App::getDependencie('UserRepository');
         $this->compteRepository = App::getDependencie('CompteRepository');
     }
@@ -74,11 +73,19 @@ class SecurityService
    
     public function login(string $telephone, string $password)
     {
+        $userData = $this->userRepository->findUser($telephone);
         
-        $user =  $this->userRepository->findUser($telephone, $password);
-     
+        if ($userData) {
+            $storedPassword = $userData['user']->getPassword();
+           
+            if (password_verify($password, $storedPassword)) {
+            
+                return $userData;
+                
+            }
+        }
         
-        return $user;
+        return null;
     }
 
 }

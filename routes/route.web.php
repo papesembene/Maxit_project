@@ -4,6 +4,7 @@ $routes = [
     'register' => [
         'controller' => 'App\Controllers\SecurityController',
         'action' => 'register',
+        'middleware' => ['crypt_password'] 
     ],
    
     '' => [

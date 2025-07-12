@@ -10,10 +10,10 @@ class User extends AbstractEntity
     private string $numero_cni;
     private string $photorecto;
     private string $photoverso;
-    private string $password;
+    private ?string $password = null;
     private Role $role;
 
-    public function __construct(int $id=0, string $nom='', string $prenom ='',string $numero_cni='', string $photorecto='', string $photoverso='',string $password='')
+    public function __construct(int $id=0, string $nom='', string $prenom ='',string $numero_cni='', string $photorecto='', string $photoverso='',string $password='', Role $role = null)
     {
         $this->id = $id;
         $this->nom = $nom;
@@ -39,8 +39,16 @@ class User extends AbstractEntity
     public function setRole(Role $role): void{$this->role = $role;}
     public function getPrenom(): string{return $this->prenom;}
     public function setPrenom(string $prenom): void{$this->prenom = $prenom;}
-    public function getPassword(): string{return $this->password;}
-    public function setPassword(string $password): void{$this->password = $password;}
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+        return $this;
+    }
     
     public static function toObject(array $tableau): static
     {
@@ -49,10 +57,10 @@ class User extends AbstractEntity
             $tableau['nom'] ?? '',
             $tableau['prenom'] ?? '',
             $tableau['numero_cni'] ?? '',
-            $tableau['photo_recto_cni'] ?? '',
-            $tableau['photo_verso_cni'] ?? '',
-            $tableau['password'] ?? ''
-        
+            $tableau['photorecto'] ?? $tableau['photo_recto_cni'] ?? '', 
+            $tableau['photoverso'] ?? $tableau['photo_verso_cni'] ?? '', 
+            $tableau['password'] ?? '',
+            isset($tableau['role']) && $tableau['role'] instanceof Role ? $tableau['role'] : null
         );
     }
 
@@ -61,13 +69,12 @@ class User extends AbstractEntity
         return [
             'id' => $object->getId(),
             'nom' => $object->getNom(),
+            'prenom' => $object->getPrenom(),
             'numero_cni' => $object->getNumeroCni(),
             'photorecto' => $object->getPhotorecto(),
             'photoverso' => $object->getPhotoverso(),
-            'role' => $object->getRole()->getLibelle()
+            'role' => $object->getRole()->getLibelle(),
+            'password' => $object->getPassword()
         ];
     }
-
-    
-
 }

@@ -11,7 +11,7 @@ class Router
         if (array_key_exists($uri, $routes)) {
             $route = $routes[$uri];
             
-            // Exécuter les middlewares si définis
+            
             if (isset($route['middleware']) && is_array($route['middleware'])) {
                 self::runMiddlewares($route['middleware']);
             }

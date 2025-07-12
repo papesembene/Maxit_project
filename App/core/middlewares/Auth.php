@@ -8,16 +8,16 @@ class Auth
     public function __invoke()
     {
         try {
-            $session = App::getDependencie('session');
-            
-            if (!$session->get('user')) {
-              
+            $session = App::getDependencie('Session');
+            $user = $session->get('user');
+            if (!$user) 
+            {
                 header('Location: /');
                 exit;
             }
-
             return true;
-        } catch (\Exception $e) {
+        } catch (\Exception $e) 
+        {
           
             header('Location: /');
             exit;

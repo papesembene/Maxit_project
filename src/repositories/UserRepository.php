@@ -13,9 +13,8 @@ use PDOException;
 
 class UserRepository extends AbstractRepository
 {
-
-    
     private static ?UserRepository $userRepository = null;
+    
     private function __construct()
     {
        parent::__construct();
@@ -34,7 +33,6 @@ class UserRepository extends AbstractRepository
         // Implementation for selecting all users
     }
 
-   
     public function insert(User $utilisateur): int
     {
         if (!$utilisateur instanceof User) 
@@ -53,8 +51,7 @@ class UserRepository extends AbstractRepository
             ':verso_cni' => $utilisateur->getPhotoverso(),
             ':profil_id' => 1,
             ':prenom' => $utilisateur->getPrenom(),
-            ':password' => 'passer123'
-            
+            ':password' => $utilisateur->getPassword() 
         ]);
         return $this->db->lastInsertId();
     }
@@ -74,68 +71,61 @@ class UserRepository extends AbstractRepository
         // Implementation for selecting a user by ID
     }
 
-    public function findUser(string $numero, string $password): ?array
+    public function findUser(string $numero): ?array
     {
         try {
-             $sql = "SELECT u.id  , u.nom, u.prenom, u.numero_cni, 
-                       u.photo_recto_cni, u.photo_verso_cni,
-                       c.id , c.solde, c.type, c.telephone, u.password,
+            $sql = "SELECT u.id, u.nom, u.prenom, u.numero_cni, 
+                       u.photo_recto_cni, u.photo_verso_cni, u.password,
+                       c.id as compte_id, c.solde, c.type, c.telephone,
                        p.role 
                 FROM utilisateur u
                 JOIN compte c ON u.id = c.client_id
                 JOIN profil p ON u.profil_id = p.id
                 WHERE c.telephone = :telephone";
         
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([':telephone' => $numero]);
-        
-        $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':telephone' => $numero]);
+            
+            $data = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($data) {
+       
+                $userData = [
+                    'id' => $data['id'],
+                    'nom' => $data['nom'],
+                    'prenom' => $data['prenom'],
+                    'numero_cni' => $data['numero_cni'],
+                    'photo_recto_cni' => $data['photo_recto_cni'],
+                    'photo_verso_cni' => $data['photo_verso_cni'],
+                    'role' => $data['role'],
+                    'password' => $data['password'] 
+                ];
+                
+                $compteData = [
+                    'id' => $data['compte_id'],
+                    'solde' => $data['solde'],
+                    'type' => $data['type'],
+                    'telephone' => $data['telephone']
+                ];
+                
+                $user = User::toObject($userData);
+                $compte = Compte::toObject($compteData);
+                $compte->setUser($user); 
+                
+                return [
+                    'user' => $user,
+                    'compte' => $compte
+                ];
+            }
+            
+            return null;
 
-        if ($data && $data['password'] === $password) {
-            // Créer l'objet User avec ses propres données
-            $userData = [
-                'id' => $data['id'],
-                'nom' => $data['nom'],
-                'prenom' => $data['prenom'],
-                'numero_cni' => $data['numero_cni'],
-                'photo_recto_cni' => $data['photo_recto_cni'],
-                'photo_verso_cni' => $data['photo_verso_cni'],
-                'role' => $data['role']
-            ];
-            
-            // Créer l'objet Compte avec ses propres données
-            $compteData = [
-                'id' => $data['id'],
-                'solde' => $data['solde'],
-                'type' => $data['type'],
-                'telephone' => $data['telephone']
-            ];
-            
-            $user = User::toObject($userData);
-            $compte = Compte::toObject($compteData);
-
-            
-            $compte->setUser($user); // Lier le compte à l'utilisateur
-            
-            return [
-                'user' => $user,
-                'compte' => $compte
-            ];
+        } catch (PDOException $e) {
+            error_log("Erreur dans findUser: " . $e->getMessage());
+            return null;
         }
-        
-        return null;
-
-    } catch (PDOException $e) {
-        error_log("Erreur dans findUserWithAccount: " . $e->getMessage());
-        return null;
-    }
     }
 
-   
-
-
-   
     public function isUnique(string $column, string $value): bool
     {
         $sql = "SELECT COUNT(*) FROM utilisateur WHERE $column = :value";
@@ -143,5 +133,4 @@ class UserRepository extends AbstractRepository
         $stmt->execute([':value' => $value]);
         return $stmt->fetchColumn() == 0;
     }
-
 }

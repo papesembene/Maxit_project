@@ -120,6 +120,32 @@
             <?php endif; ?>
         </div>
 
+        <!-- Ajouter après le champ téléphone -->
+        <div>
+            <label class="block text-orange-600 font-semibold mb-2">
+                Mot de passe <span class="text-orange-600">*</span>
+            </label>
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <input 
+                    type="password" 
+                    class="w-full pl-10 pr-4 py-3 border-2 border-orange-300 rounded-lg text-gray-700 input-focus transition-all duration-200"
+                    name="password"
+                    placeholder="Entrez votre mot de passe"
+                    
+                >
+            </div>
+            <?php if (!empty($errors['password'])): ?>
+                <?php foreach ($errors['password'] as $error): ?>
+                    <div class="text-red-600 text-xs mt-1"><?= htmlspecialchars($error) ?></div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+
         <!-- Ligne 2: RECTO CIN et VERSO CIN -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>

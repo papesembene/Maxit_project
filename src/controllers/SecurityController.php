@@ -35,7 +35,7 @@ class SecurityController extends AbstractController
         {
             $rules = [
                 'telephone' => ['required', 'length:9', 'phone'],
-                'password' => ['required','length:6,8'],
+                'password' => ['required'],
             ];
           
             $validator = Validator::make($_POST, $rules);
@@ -47,21 +47,25 @@ class SecurityController extends AbstractController
                 if ($user) 
                 {
                     $this->session->set('user', $user);
-                    $this->redirect('/client/dashboard');
-                    exit;
+                    header('Location: /client/dashboard');
+                    exit();
                 } else 
                 {
-                    $this->session->set('errors', ['Identifiants incorrects']);
+                    // Erreur générale - sera affichée en haut
+                    $this->session->set('general_error', 'Identifiants incorrects');
                 }
             } else 
             {
-                $this->session->set('errors', $validator->errors());
+                // Erreurs de validation - seront affichées sous chaque champ
+                $this->session->set('field_errors', $validator->errors());
             }
         }
+   
+        
         $this->render("auth/login",[
             'success' => $success,
             'old' => $_POST ?? [],
-            'user' => $this->session->get('user') ?? null,
+           
         ]);
     }
 
@@ -76,10 +80,11 @@ class SecurityController extends AbstractController
                 'numero_telephone' => ['required', 'phone', 'unique:compte,telephone'],
                 'photorecto' => ['file', 'mimes:jpeg,png,jpg', 'max:2000000'],
                 'photoverso' => ['file', 'mimes:jpeg,png,jpg', 'max:2000000'],
+                'password' => ['required'],
             ];
 
-           
             $data = array_merge($_POST, $_FILES);
+            
             $validator = Validator::make($data, $rules);
             
             if ($validator->validate()) 
@@ -88,22 +93,21 @@ class SecurityController extends AbstractController
                     $photorectoPath = FileService::uploadFile($_FILES['photorecto'], 'images/cni');
                     $photoversoPath = FileService::uploadFile($_FILES['photoverso'], 'images/cni');
 
-                    $user = User::toObject(array_merge($_POST, [
-                        'photorecto' => $photorectoPath,
-                        'photoverso' => $photoversoPath,
-                    ]));
-
+                    $userData = $_POST;
+                    $userData['photorecto'] = $photorectoPath;
+                    $userData['photoverso'] = $photoversoPath;
+                    $user = User::toObject($userData);
                     $compte = new Compte(
                         0,
                         0.0,
                         'Principal',
                         $_POST['numero_telephone'],
                         0
-                    );
-                    
+                    ); 
                     $userId = $this->securityService->registerUserWithCompte($user, $compte);
                   
-                    if ($userId !== false) {
+                    if ($userId !== false)
+                     {
                         $code = random_int(100000, 999999); 
                         $phoneNumber = '+221' . $_POST['numero_telephone'];
                         $this->smsService->sendCode($phoneNumber, $code);

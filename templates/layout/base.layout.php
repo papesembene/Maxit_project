@@ -21,10 +21,10 @@
         }
 
         .sidebar {
-            width: 200px;
+            width: 280px;
             background-color: #1a1a1a;
             color: white;
-            padding: 20px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -33,12 +33,12 @@
         .profile {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
         }
 
         .profile-avatar {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             background-color: #ff8c00;
             border-radius: 50%;
             display: flex;
@@ -46,23 +46,35 @@
             justify-content: center;
         }
 
+        .profile-info {
+            flex: 1;
+        }
+
         .profile-name {
             font-size: 16px;
             font-weight: 500;
+            color: white;
+            margin-bottom: 4px;
+        }
+
+        .profile-phone {
+            font-size: 13px;
+            color: #ccc;
         }
 
         .sidebar-button {
             background-color: #333;
             color: white;
             border: none;
-            padding: 12px 16px;
+            padding: 14px 18px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 15px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             text-align: left;
+            width: 100%;
         }
 
         .sidebar-button:hover {
@@ -73,16 +85,21 @@
             margin-top: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .sidebar-link {
             color: #ff8c00;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 15px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            padding: 8px 0;
+        }
+
+        .sidebar-link:hover {
+            color: #ffb347;
         }
 
         .main-content {
@@ -317,7 +334,14 @@
             <div class="profile-avatar">
                 <i class="bi bi-person-fill"></i>
             </div>
-            <div class="profile-name">Mr sam's</div>
+            <div class="profile-info">
+                <div class="profile-name">
+                    <?= htmlspecialchars($user->getPrenom() . ' ' . $user->getNom()) ?>
+                </div>
+                <div class="profile-phone">
+                    <?= htmlspecialchars($compte->getNumeroTelephone()) ?>
+                </div>
+            </div>
         </div>
         
         <button class="sidebar-button">
@@ -333,11 +357,11 @@
         <div class="sidebar-bottom">
             <a href="#" class="sidebar-link">
                 <i class="bi bi-gear"></i>
-                settings
+                Paramètres
             </a>
-            <a href="#" class="sidebar-link">
+            <a href="/" class="sidebar-link">
                 <i class="bi bi-box-arrow-right"></i>
-                deconnexion
+                Déconnexion
             </a>
         </div>
     </div>

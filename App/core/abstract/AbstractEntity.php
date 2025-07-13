@@ -7,13 +7,12 @@ abstract class AbstractEntity
     private Object $object;
 
     abstract public static function toObject(array $tableau): static;
-
-   
     abstract public function toArray(Object $object): array;
 
-     public static function toJson(Object $object): string
-     {
-         return json_encode(toArray($object));
-     }
-
+  
+    public static function toJson(Object $object): string
+    {
+        $instance = new static();
+        return json_encode($instance->toArray($object));
+    }
 }

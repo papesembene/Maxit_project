@@ -18,12 +18,14 @@ class App
         'services'=>[
             \App\Services\SecurityService::class,
             \App\Services\SmsService::class,
+            \App\Services\TransactionService::class,
          
         ],
 
         'repositories'=>[
             \App\Repositories\UserRepository::class,
             \App\Repositories\CompteRepository::class,
+            \App\Repositories\TransactionRepository::class,
             
             
         ],
@@ -65,7 +67,6 @@ class App
         
 
 }
-
 
 
 

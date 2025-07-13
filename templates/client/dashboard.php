@@ -29,7 +29,7 @@
 
         <div class="transactions-section">
             <div class="transactions-title">Transactions (<?= count($transactions) ?>)</div>
-            <a href="#" class="see-more">
+            <a href="/user/transactions" class="see-more">
                 Voir plus <i class="bi bi-arrow-right"></i>
             </a>
         </div>

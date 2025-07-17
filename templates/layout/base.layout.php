@@ -409,7 +409,7 @@
                 <i class="bi bi-gear"></i>
                 Paramètres
             </a>
-            <a href="/" class="sidebar-link">
+            <a href="/logout" class="sidebar-link">
                 <i class="bi bi-box-arrow-right"></i>
                 Déconnexion
             </a>

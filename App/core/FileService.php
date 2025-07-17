@@ -7,7 +7,7 @@ class FileService
     {
            $dossier = $dossier ?? $_ENV['UPLOAD_DIR'] ?? 'images/uploads';
         
-        // Vérifier si le fichier est valide
+      
         if (!isset($fichier) || $fichier['error'] !== UPLOAD_ERR_OK) {
             throw new \Exception("Fichier invalide ou erreur d'upload.");
         }

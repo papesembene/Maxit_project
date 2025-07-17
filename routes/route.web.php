@@ -21,7 +21,12 @@ $routes = [
         'controller' => 'App\Controllers\UserController',
         'action' => 'transactions',
         'middleware' => ['auth']
-    ]
+       ],
+    'logout' => [
+        'controller' => 'App\Controllers\SecurityController',
+        'action' => 'logout',
+        'middleware' => ['auth']
+    ],
 ];
 
 return $routes;

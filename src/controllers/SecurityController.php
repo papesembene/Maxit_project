@@ -68,6 +68,12 @@ class SecurityController extends AbstractController
            
         ]);
     }
+    public function logout()
+    {
+        $this->session->destroy();
+        header('Location: /');
+        exit();
+    }
 
     public function register()
     {

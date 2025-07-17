@@ -19,6 +19,7 @@ class App
             \App\Services\SecurityService::class,
             \App\Services\SmsService::class,
             \App\Services\TransactionService::class,
+            \App\Services\CompteService::class,
          
         ],
 

@@ -75,10 +75,12 @@ class SecurityService
     {
         $userData = $this->userRepository->findUser($telephone);
         
-        if ($userData) {
+        if ($userData) 
+        {
             $storedPassword = $userData['user']->getPassword();
            
-            if (password_verify($password, $storedPassword)) {
+            if (password_verify($password, $storedPassword)) 
+            {
             
                 return $userData;
                 

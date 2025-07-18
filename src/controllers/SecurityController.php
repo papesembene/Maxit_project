@@ -51,12 +51,12 @@ class SecurityController extends AbstractController
                     exit();
                 } else 
                 {
-                    // Erreur générale - sera affichée en haut
+                    
                     $this->session->set('general_error', 'Identifiants incorrects');
                 }
             } else 
             {
-                // Erreurs de validation - seront affichées sous chaque champ
+                
                 $this->session->set('field_errors', $validator->errors());
             }
         }

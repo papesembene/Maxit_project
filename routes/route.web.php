@@ -31,4 +31,17 @@ return [
         'middlewares' => ['crypt_password'],
         'methods' => ['GET', 'POST'],
     ],
+    '/client/acountsList'=> [
+        'controller' => App\Controllers\UserController::class,
+        'method' => 'acountsList',
+        'middlewares' => ['auth'],
+        'methods' => ['GET'],
+    ],
+    '/client/create-account'=> [
+        'controller' => App\Controllers\UserController::class,
+        'method' => 'createSecondaryAccount',
+        'middlewares' => ['auth'],
+        'methods' => ['GET', 'POST'],
+        
+    ],
 ];

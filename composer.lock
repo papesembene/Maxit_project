@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "34478d34b168b04d505853d1cd2e9fa4",
+    "content-hash": "52bcfd1a3ccbbb13a605ea484409e7b1",
     "packages": [
         {
             "name": "graham-campbell/result-type",
@@ -69,17 +69,17 @@
             "time": "2024-07-20T21:45:45+00:00"
         },
         {
-            "name": "mr-sem-s/router-php",
-            "version": "v1.0.1",
+            "name": "mrsems/router-php",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/papesembene/RouterDependency.git",
-                "reference": "2a8eef67e2afa23aecd2b395b6a6f7ad01454b4a"
+                "reference": "01acd67d14d0ea52d31c6732cd12c4851d9f8910"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/papesembene/RouterDependency/zipball/2a8eef67e2afa23aecd2b395b6a6f7ad01454b4a",
-                "reference": "2a8eef67e2afa23aecd2b395b6a6f7ad01454b4a",
+                "url": "https://api.github.com/repos/papesembene/RouterDependency/zipball/01acd67d14d0ea52d31c6732cd12c4851d9f8910",
+                "reference": "01acd67d14d0ea52d31c6732cd12c4851d9f8910",
                 "shasum": ""
             },
             "require": {
@@ -110,9 +110,9 @@
             ],
             "support": {
                 "issues": "https://github.com/papesembene/RouterDependency/issues",
-                "source": "https://github.com/papesembene/RouterDependency/tree/v1.0.1"
+                "source": "https://github.com/papesembene/RouterDependency/tree/v1.0.0"
             },
-            "time": "2025-07-17T23:29:21+00:00"
+            "time": "2025-07-18T09:42:10+00:00"
         },
         {
             "name": "phpoption/phpoption",

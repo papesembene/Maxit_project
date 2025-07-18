@@ -24,21 +24,14 @@ class CompteService
         return self::$instance;
     }
 
-    public function creerCompteSecondaire(string $numeroTelephone, int $clientId, float $soldeInitial = 0.00): ?Compte
+    public function creerCompteSecondaire(Compte $compte): int
     {
-        if (!$this->compteRepository->isNumeroTelephoneUnique($numeroTelephone)) {
+        if (!$this->isNumeroTelephoneUnique($compte->getNumeroTelephone())) 
+        {
             throw new \Exception("Ce numéro de téléphone existe déjà");
         }
-
-        $compte = new Compte($numeroTelephone, $soldeInitial, 'Secondaire', $clientId);
-        $id = $this->compteRepository->insert($compte);
-        
-        if ($id > 0) {
-            $compte->setId($id);
-            return $compte;
-        }
-        
-        return null;
+        return $this->compteRepository->insert($compte);
+   
     }
 
     public function getTousLesComptes(int $clientId): array
@@ -64,5 +57,10 @@ class CompteService
     public function updateSolde(int $compteId, float $nouveauSolde): bool
     {
         return $this->compteRepository->updateSolde($compteId, $nouveauSolde);
+    }
+
+    public function isNumeroTelephoneUnique(string $numeroTelephone): bool
+    {
+        return $this->compteRepository->isNumeroTelephoneUnique($numeroTelephone);
     }
 }

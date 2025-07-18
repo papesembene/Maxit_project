@@ -31,7 +31,7 @@ class CompteRepository extends AbstractRepository
             $compte->getNumeroTelephone(),
             $compte->getSolde() ? $compte->getSolde() : 0.0,
             $compte->getTypeCompte(),
-            $compte->getClientId()
+            $compte->getUser()->getId()
         ]);
         return $this->db->lastInsertId();
     }

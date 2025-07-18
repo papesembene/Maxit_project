@@ -1,31 +1,3 @@
-<div class="header">
-    <div class="search-bar">
-        <i class="bi bi-search search-icon"></i>
-        <input type="text" class="search-input" placeholder="Rechercher une transaction...">
-    </div>
-    <button class="menu-button">
-        <i class="bi bi-list"></i>
-    </button>
-</div>
-
-<div class="balance-card">
-    <div class="balance-header">
-        <div class="balance-arrows">
-            <i class="bi bi-arrow-up-right arrow"></i>
-            <i class="bi bi-arrow-down-left arrow"></i>
-        </div>
-        <div class="balance-type">Principal</div>
-    </div>
-    <div class="balance-amount">
-        <div class="currency-icon">
-            <i class="bi bi-lightning-charge"></i>
-        </div>
-        <div class="amount"><?= htmlspecialchars($compte->getSolde()) ?> FCFA</div>
-    </div>
-    <a href="/user" class="balance-link">
-        <i class="bi bi-arrow-left"></i> Retour au tableau de bord
-    </a>
-</div>
 
 <div class="transactions-section">
     <div class="transactions-title">Toutes les transactions (<?= $pagination['totalItems'] ?>)</div>

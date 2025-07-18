@@ -8,6 +8,9 @@ use App\Services\TransactionService;
 use App\Services\CompteService;
 use App\Core\App;
 use App\Core\Paginator;
+use App\Core\Validator;
+use App\Entities\Compte;
+
 
 class UserController extends AbstractController
 {
@@ -62,7 +65,7 @@ class UserController extends AbstractController
       
         $result = Paginator::paginate($allTransactions, 6);
         
-        $this->render('client/transactions', [
+        $this->render('client/transactions/transactions', [
             'user' => $user,
             'compte' => $compte,
             'transactions' => $result['items'],
@@ -116,6 +119,66 @@ class UserController extends AbstractController
             'compte' => $compte,
             'message' => $message,
             'error' => $error
+        ]);
+    }
+
+    public function acountsList()
+    {
+        $userData = $this->session->get('user');
+        $user = $userData['user'] ?? null;
+        $compte = $userData['compte'] ?? null;
+        $accounts = $this->compteService->getComptesSecondaires($user->getId());
+       
+        $this->render("client/compte/index", [
+            'user' => $user,
+            'compte' => $compte,
+            'accounts' => $accounts,
+           
+        ]);
+    }
+
+    public function createSecondaryAccount()
+    {
+        $userData = $this->session->get('user');
+        $user = $userData['user'] ?? null;
+        $compte = $userData['compte'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') 
+        {
+           $rules = [
+                'telephone' => ['required', 'length:9', 'phone'],
+                'solde' => ['number'],
+            ];
+        
+            $validator = Validator::make($_POST, $rules);
+          
+            if ($validator->validate())
+            {
+                try {
+                  $account = new Compte(
+                    0,
+                    $_POST['solde'],
+                    'Secondaire',
+                    $_POST['telephone']
+                  );
+                $account->setUser($user);
+                $compte = $this->compteService->creerCompteSecondaire($account);
+                    if ($compte) {
+                        $this->session->set('success', 'Compte secondaire créé avec succès !');
+                        $this->redirect('/client/acountsList');
+                    } else {
+                        $this->session->set('error', 'Erreur lors de la création du compte');
+                    }
+                } catch (\Throwable $th) {
+                    echo "Erreur lors de la création du compte : " . $th->getMessage();
+                    die;
+                }
+            }
+
+        }
+
+        $this->render("client/compte/create", [
+            'user' => $user,
+            'compte' => $compte
         ]);
     }
 }

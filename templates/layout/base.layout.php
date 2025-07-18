@@ -403,6 +403,10 @@
             <i class="bi bi-plus"></i>
             Nouveau Compte
         </button>
+        <button class="sidebar-button">
+            <i class="bi bi-list-check"></i>
+            Voir mes Comptes
+        </button>
         
         <div class="sidebar-bottom">
             <a href="#" class="sidebar-link">

@@ -16,10 +16,11 @@ function hashPassword($plainPassword) {
     return password_hash($plainPassword, PASSWORD_DEFAULT);
 }
 
-// Données des utilisateurs avec mots de passe en clair (pour le seeding uniquement)
+
 $users = [
     [
-        'nom' => 'John Doe',
+        'nom' => 'John ',
+        'prenom' => 'Doe',
         'numero_cni' => 'CNI123456',
         'photo_recto_cni' => 'recto1.png',
         'photo_verso_cni' => 'verso1.png',
@@ -27,7 +28,8 @@ $users = [
         'password' => 'password1'
     ],
     [
-        'nom' => 'Jane Smith',
+        'nom' => 'Jane ',
+        'prenom' => 'Smith',
         'numero_cni' => 'CNI654321',
         'photo_recto_cni' => 'recto2.png',
         'photo_verso_cni' => 'verso2.png',

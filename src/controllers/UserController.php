@@ -128,12 +128,14 @@ class UserController extends AbstractController
         $user = $userData['user'] ?? null;
         $compte = $userData['compte'] ?? null;
         $accounts = $this->compteService->getComptesSecondaires($user->getId());
-       
+        $primaryaccount = $this->compteService->getComptePrincipal($user->getId());
+        $totalAccounts = $this->compteService->countComptes();
         $this->render("client/compte/index", [
             'user' => $user,
             'compte' => $compte,
             'accounts' => $accounts,
-           
+            'primaryaccount' => $primaryaccount,
+            'totalAccounts' => $totalAccounts
         ]);
     }
 

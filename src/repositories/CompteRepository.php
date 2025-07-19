@@ -89,11 +89,17 @@ class CompteRepository extends AbstractRepository
 
     private function hydrate(array $data): Compte
     {
-        $compte = new Compte($data['telephone'], $data['solde'], $data['type'], $data['client_id']);
+        $compte = new Compte($data['id'],$data['solde'], $data['type'], $data['telephone']);
         $compte->setId($data['id']);
         return $compte;
     }
 
+    public function count(): int
+    {
+        $stmt = $this->db->query("SELECT COUNT(*) FROM compte");
+        return (int) $stmt->fetchColumn();
+    }
+    
     public function selectAll() {}
     public function update() {}
     public function delete() {}

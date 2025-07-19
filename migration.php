@@ -1,13 +1,15 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
-$driver = getenv('DB_DRIVER') ?: 'pgsql';
-$host = getenv('DB_HOST') ?: '127.0.0.1';
-$port = getenv('DB_PORT') ?: '5432';
-$username = getenv('DB_USER') ?: 'postgres';
-$password = getenv('DB_PASSWORD') ?: 'passer';
-$dbName = getenv('DB_NAME') ?: 'maxit_sa';
+
+$driver = getenv('DB_DRIVER') ;
+$host = getenv('DB_HOST');
+$port = getenv('DB_PORT') ;
+$username = getenv('DB_USER') ;
+$password = getenv('DB_PASSWORD') ;
+$dbName = getenv('DB_NAME');
 
 try {
     $dsn = "$driver:host=$host;port=$port";

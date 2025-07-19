@@ -8,7 +8,7 @@ return [
         photo_recto_cni VARCHAR(255) NOT NULL,
         photo_verso_cni VARCHAR(255) NOT NULL,
         profil_id INTEGER REFERENCES profil(id) ON DELETE SET NULL ON UPDATE CASCADE,
-        password VARCHAR(255) NOT NULL,
+        password VARCHAR(255) NOT NULL
        
     )"
 ];

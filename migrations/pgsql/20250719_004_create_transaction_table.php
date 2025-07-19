@@ -6,7 +6,7 @@ return [
         date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         type VARCHAR(20) NOT NULL CHECK (type IN ('Retrait', 'Depot', 'Paiement')),
         montant DECIMAL(12,2) NOT NULL,
-        compte_id INTEGER NOT NULL REFERENCES compte(id) ON DELETE CASCADE ON UPDATE CASCADE,
+        compte_id INTEGER NOT NULL REFERENCES compte(id) ON DELETE CASCADE ON UPDATE CASCADE
         
     )"
 ];

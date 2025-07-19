@@ -4,6 +4,7 @@ return [
     "CREATE TABLE IF NOT EXISTS utilisateur (
         id SERIAL PRIMARY KEY,
         nom VARCHAR(100) NOT NULL,
+        prenom VARCHAR(100) NOT NULL,
         numero_cni VARCHAR(20) UNIQUE NOT NULL,
         photo_recto_cni VARCHAR(255) NOT NULL,
         photo_verso_cni VARCHAR(255) NOT NULL,

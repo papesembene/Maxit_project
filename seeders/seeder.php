@@ -47,12 +47,13 @@ try {
     $pdo->exec("INSERT INTO profil (role) VALUES ('Client'), ('Service Commercial') ON CONFLICT DO NOTHING;");
 
     // Seed Utilisateur avec mots de passe cryptés
-    $stmt = $pdo->prepare("INSERT INTO utilisateur (nom, numero_cni, photo_recto_cni, photo_verso_cni, profil_id, password) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;");
+    $stmt = $pdo->prepare("INSERT INTO utilisateur (nom,prenom, numero_cni, photo_recto_cni, photo_verso_cni, profil_id, password) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;");
     
     foreach ($users as $user) {
         $hashedPassword = hashPassword($user['password']);
         $stmt->execute([
             $user['nom'],
+            $user['prenom'],
             $user['numero_cni'],
             $user['photo_recto_cni'],
             $user['photo_verso_cni'],

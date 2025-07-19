@@ -1,12 +1,40 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$driver = getenv('DB_DRIVER') ?: 'pgsql';
-$host = getenv('DB_HOST') ?: '127.0.0.1';
-$port = getenv('DB_PORT') ?: '5432';
-$username = getenv('DB_USER') ?: 'postgres';
-$password = getenv('DB_PASSWORD') ?: 'passer';
-$dbName = getenv('DB_NAME') ?: 'maxit_sa';
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$driver = $_ENV['DB_DRIVER'];
+$host = $_ENV['DB_HOST'];
+$port = $_ENV['DB_PORT'];
+$username = $_ENV['DB_USER'];
+$password = $_ENV['DB_PASSWORD'];
+$dbName = $_ENV['DB_NAME'];
+
+// Fonction pour crypter les mots de passe
+function hashPassword($plainPassword) {
+    return password_hash($plainPassword, PASSWORD_DEFAULT);
+}
+
+// Données des utilisateurs avec mots de passe en clair (pour le seeding uniquement)
+$users = [
+    [
+        'nom' => 'John Doe',
+        'numero_cni' => 'CNI123456',
+        'photo_recto_cni' => 'recto1.png',
+        'photo_verso_cni' => 'verso1.png',
+        'profil_id' => 1,
+        'password' => 'password1'
+    ],
+    [
+        'nom' => 'Jane Smith',
+        'numero_cni' => 'CNI654321',
+        'photo_recto_cni' => 'recto2.png',
+        'photo_verso_cni' => 'verso2.png',
+        'profil_id' => 2,
+        'password' => 'password2'
+    ]
+];
 
 try {
     $dsn = "$driver:host=$host;port=$port;dbname=$dbName";
@@ -16,11 +44,20 @@ try {
     // Seed Profil
     $pdo->exec("INSERT INTO profil (role) VALUES ('Client'), ('Service Commercial') ON CONFLICT DO NOTHING;");
 
-    // Seed Utilisateur
-    $pdo->exec("INSERT INTO utilisateur (nom, numero_cni, photo_recto_cni, photo_verso_cni, profil_id, password) VALUES
-        ('John Doe', 'CNI123456', 'recto1.png', 'verso1.png', 1, 'password1'),
-        ('Jane Smith', 'CNI654321', 'recto2.png', 'verso2.png', 2, 'password2')
-        ON CONFLICT DO NOTHING;");
+    // Seed Utilisateur avec mots de passe cryptés
+    $stmt = $pdo->prepare("INSERT INTO utilisateur (nom, numero_cni, photo_recto_cni, photo_verso_cni, profil_id, password) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING;");
+    
+    foreach ($users as $user) {
+        $hashedPassword = hashPassword($user['password']);
+        $stmt->execute([
+            $user['nom'],
+            $user['numero_cni'],
+            $user['photo_recto_cni'],
+            $user['photo_verso_cni'],
+            $user['profil_id'],
+            $hashedPassword
+        ]);
+    }
 
     // Seed Compte
     $pdo->exec("INSERT INTO compte (telephone, solde, type, client_id) VALUES
@@ -37,6 +74,11 @@ try {
         ON CONFLICT DO NOTHING;");
 
     echo "Seeders exécutés avec succès !\n";
+    echo "Mots de passe utilisés pour les tests :\n";
+    foreach ($users as $user) {
+        echo "- {$user['nom']}: {$user['password']}\n";
+    }
+    
 } catch (Exception $e) {
     echo "Erreur lors du seeding : " . $e->getMessage() . "\n";
 }

@@ -1,21 +1,15 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use App\Core\DataBase;
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
-
-$driver = $_ENV['DB_DRIVER'];
-$host = $_ENV['DB_HOST'];
-$port = $_ENV['DB_PORT'];
-$username = $_ENV['DB_USER'];
-$password = $_ENV['DB_PASSWORD'];
-$dbName = $_ENV['DB_NAME'];
 
 // Fonction pour crypter les mots de passe
 function hashPassword($plainPassword) {
     return password_hash($plainPassword, PASSWORD_DEFAULT);
 }
-
 
 $users = [
     [
@@ -39,9 +33,8 @@ $users = [
 ];
 
 try {
-    $dsn = "$driver:host=$host;port=$port;dbname=$dbName";
-    $pdo = new PDO($dsn, $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $database = DataBase::getInstance();
+    $pdo = $database->connect();
 
     // Seed Profil
     $pdo->exec("INSERT INTO profil (role) VALUES ('Client'), ('Service Commercial') ON CONFLICT DO NOTHING;");

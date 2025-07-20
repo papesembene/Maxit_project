@@ -1,21 +1,19 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
+use App\Core\DataBase;
+
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-$driver = $_ENV['DB_DRIVER'] ;
-$host = $_ENV['DB_HOST'];
-$port = $_ENV['DB_PORT'] ;
-$username = $_ENV['DB_USER'] ;
-$password = $_ENV['DB_PASSWORD'] ;
+$driver = $_ENV['DB_DRIVER'];
 $dbName = $_ENV['DB_NAME'];
 
-
 try {
-    $dsn = "$driver:host=$host;port=$port";
-    $pdo = new PDO($dsn, $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $database = DataBase::getInstance();
+    
+    // Connexion sans DB pour créer la base si nécessaire
+    $pdo = $database->connectWithoutDB();
 
     if ($driver === 'mysql') {
         $pdo->exec("CREATE DATABASE IF NOT EXISTS `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
@@ -26,23 +24,15 @@ try {
         if (!$check) {
             $pdo->exec("CREATE DATABASE \"$dbName\"");
             echo "Base PostgreSQL `$dbName` créée.\nRelancez la migration pour créer les tables.\n";
-            writeEnvIfNotExists([
-                'driver' => $driver,
-                'host' => $host,
-                'port' => $port,
-                'username' => $username,
-                'password' => $password,
-                'dbname' => $dbName
-            ]);
+            writeEnvIfNotExists();
             exit;
         } else {
             echo "ℹ Base PostgreSQL `$dbName` déjà existante.\n";
         }
     }
 
-    $dsn = "$driver:host=$host;port=$port;dbname=$dbName";
-    $pdo = new PDO($dsn, $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Maintenant utiliser la connexion avec DB
+    $pdo = $database->connect();
 
     // 1. Créer la table 'migrations' si elle n'existe pas
     $pdo->exec(
@@ -101,29 +91,21 @@ try {
     }
 
     echo "Toutes les migrations $driver ont été exécutées avec succès dans `$dbName`.\n";
-    
-    writeEnvIfNotExists([
-        'driver' => $driver,
-        'host' => $host,
-        'port' => $port,
-        'username' => $username,
-        'password' => $password,
-        'dbname' => $dbName
-    ]);
+    writeEnvIfNotExists();
 
 } catch (Exception $e) {
     echo " Erreur : " . $e->getMessage() . "\n";
 }
 
-function writeEnvIfNotExists($config) {
+function writeEnvIfNotExists() {
     $envFile = __DIR__ . '/.env';
     if (!file_exists($envFile)) {
-        $content = "DB_DRIVER={$config['driver']}\n";
-        $content .= "DB_HOST={$config['host']}\n";
-        $content .= "DB_PORT={$config['port']}\n";
-        $content .= "DB_USER={$config['username']}\n";
-        $content .= "DB_PASSWORD={$config['password']}\n";
-        $content .= "DB_NAME={$config['dbname']}\n";
+        $content = "DB_DRIVER={$_ENV['DB_DRIVER']}\n";
+        $content .= "DB_HOST={$_ENV['DB_HOST']}\n";
+        $content .= "DB_PORT={$_ENV['DB_PORT']}\n";
+        $content .= "DB_USER={$_ENV['DB_USER']}\n";
+        $content .= "DB_PASSWORD={$_ENV['DB_PASSWORD']}\n";
+        $content .= "DB_NAME={$_ENV['DB_NAME']}\n";
         file_put_contents($envFile, $content);
         echo " Fichier .env créé avec la configuration de base de données.\n";
     }

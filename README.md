@@ -11,7 +11,7 @@ cd Maxit_project
 ```
 
 ### 2. Configuration base de données
-Créez votre base PostgreSQL et configurez le fichier `.env` :
+Créez votre base  et configurez le fichier `.env` :
 
 ```env
 DB_HOST=localhost

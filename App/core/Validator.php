@@ -143,7 +143,16 @@ class Validator
             throw new \Exception("La règle length attend 1 ou 2 paramètres.");
         }
     }
-
+     protected function validateNumber(string $field, $value, array $params)
+    {
+        if ($value && !is_numeric($value)) {
+            $this->addError($field, "Le champ $field doit être un nombre.");
+        }
+        
+        if ($value && (float)$value <= 0) {
+            $this->addError($field, "Le champ $field doit être supérieur à zéro.");
+        }
+    }
     protected function addError(string $field, string $message)
     {
         $this->errors[$field][] = $message;
@@ -153,4 +162,5 @@ class Validator
     {
         return $this->errors;
     }
+   
 }

@@ -76,4 +76,12 @@ class CompteService
     {
         return $this->compteRepository->setComptePrincipal($compteId, $clientId);
     }
+
+    /**
+     * Trouver un compte par numéro de téléphone
+     */
+    public function getCompteByTelephone(string $telephone): ?Compte
+    {
+        return $this->compteRepository->findByTelephone($telephone);
+    }
 }

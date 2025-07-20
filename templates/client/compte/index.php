@@ -2,12 +2,12 @@
     <!-- En-tête -->
     <div class="flex justify-between items-center mb-6">
         <div class="flex items-center">
-            <div class="bg-blue-600 w-10 h-10 rounded-full flex items-center justify-center mr-3">
+            <div class="pagination-btn w-10 h-10 rounded-full flex items-center justify-center mr-3">
                 <i class="bi bi-wallet2 text-white"></i>
             </div>
             <h2 class="text-xl font-bold text-gray-800">Tous mes comptes (<?= $totalAccounts?>)</h2>
         </div>
-        <a href="/client/create-account" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition flex items-center">
+        <a href="/client/create-account" class="pagination-btn text-white px-4 py-2 rounded-lg font-medium ">
             <i class="bi bi-plus-circle mr-2"></i>
             Nouveau compte
         </a>
@@ -20,9 +20,7 @@
                 <div class="flex-1">
                     <div class="flex items-center mb-2">
                         <h3 class="font-bold text-gray-800 mr-3">Compte Principal</h3>
-                        <span class="bg-blue-600 text-white px-2 py-1 rounded text-xs font-medium">
-                            PRINCIPAL
-                        </span>
+                       
                     </div>
                     <p class="text-gray-600 text-sm">
                         <?php echo $primaryaccount->getNumeroTelephone(); ?> • Solde disponible
@@ -45,15 +43,13 @@
                     <div class="flex items-center justify-between">
                         <div class="flex-1">
                             <div class="flex items-center mb-2">
-                                <h3 class="font-bold text-gray-800 mr-3">
+                                <h3 class="bg-green-200 text-black px-2 py-1 rounded text-xs font-medium">
                                     <?= htmlspecialchars($account->getTypeCompte()) ?>
                                 </h3>
-                                <span class="bg-gray-500 text-white px-2 py-1 rounded text-xs font-medium">
-                                    SECONDAIRE
-                                </span>
+                               
                             </div>
                             <p class="text-gray-600 text-sm">
-                                <?= htmlspecialchars($account->getNumeroTelephone()) ?> • Solde disponible
+                                <?= htmlspecialchars($account->getNumeroTelephone()) ?> 
                             </p>
                         </div>
                         <div class="text-right">
@@ -63,7 +59,7 @@
                             </div>
                             <form method="POST" action="/client/set-main-account" style="display: inline;">
                                 <input type="hidden" name="compte_id" value="<?= $account->getId() ?>">
-                                <button type="submit" class="btn btn-primary btn-sm">
+                                <button type="submit"  class="bg-green-200 text-black px-2 py-1 rounded text-xs font-medium">
                                     Définir comme principal
                                 </button>
                             </form>
@@ -84,5 +80,25 @@
                 </a>
             </div>
         <?php endif; ?>
+        
+        <?php if ($pagination['totalPages'] > 1): ?>
+        <div class="pagination">
+            <?php if ($pagination['hasPrevious']): ?>
+                <a href="?page=<?= $pagination['currentPage'] - 1 ?>" class="pagination-btn">
+                    <i class="bi bi-chevron-left"></i> Précédent
+                </a>
+            <?php endif; ?>
+            
+            <div class="pagination-info">
+                Page <?= $pagination['currentPage'] ?> sur <?= $pagination['totalPages'] ?>
+            </div>
+            
+            <?php if ($pagination['hasNext']): ?>
+                <a href="?page=<?= $pagination['currentPage'] + 1 ?>" class="pagination-btn">
+                    Suivant <i class="bi bi-chevron-right"></i>
+                </a>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
     </div>
 </div>

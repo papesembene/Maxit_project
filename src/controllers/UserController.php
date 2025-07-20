@@ -156,11 +156,14 @@ class UserController extends AbstractController
                 $secondaryAccounts[] = $account;
             }
         }
+        $result = Paginator::paginate($secondaryAccounts,2);
+      
         
         $totalAccounts = $this->compteService->countComptes();
         
         $this->render("client/compte/index", array_merge($commonData, [
-            'accounts' => $secondaryAccounts,
+            'accounts' => $result['items'],
+            'pagination'=>$result,
             'primaryaccount' => $primaryAccount,
             'totalAccounts' => $totalAccounts
         ]));
@@ -294,5 +297,82 @@ class UserController extends AbstractController
         }
 
         $this->redirect('/client/acountsList');
+    }
+
+    public function depotTransfert(): void
+    {
+        $userData = $this->session->get('user');
+        if (!$userData) {
+            $this->redirect('/');
+            return;
+        }
+        
+        $commonData = $this->prepareCommonData($userData);
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $rules = [
+                'telephone_destination' => ['required', 'length:9', 'phone'],
+                'montant' => ['required'],
+            ];
+        
+            $validator = Validator::make($_POST, $rules);
+          
+            if ($validator->validate()) {
+                try {
+                    $telephoneDestination = $_POST['telephone_destination'];
+                    $montant = floatval($_POST['montant']);
+                    
+                    $compteDestination = $this->compteService->getCompteByTelephone($telephoneDestination);
+                    
+                    if (!$compteDestination) {
+                        throw new \Exception("Compte de destination introuvable");
+                    }
+                    
+                    if ($commonData['compte']->getSolde() < $montant) {
+                        throw new \Exception("Solde insuffisant");
+                    }
+                    
+                    // Débiter le compte source
+                    $nouveauSoldeSource = $commonData['compte']->getSolde() - $montant;
+                    $this->compteService->updateSolde($commonData['compte']->getId(), $nouveauSoldeSource);
+                    
+                    // Créditer le compte destination
+                    $nouveauSoldeDestination = $compteDestination->getSolde() + $montant;
+                    $this->compteService->updateSolde($compteDestination->getId(), $nouveauSoldeDestination);
+                    
+                    // Créer les transactions
+                    $transactionSortie = new \App\Entities\Transaction(
+                        0,
+                        $montant,
+                        'Depot',
+                        new \DateTime(),
+                        $commonData['compte']->getId()
+                    );
+                    $this->transactionService->createTransaction($transactionSortie);
+                    
+                    $transactionEntree = new \App\Entities\Transaction(
+                        0,
+                        $montant,
+                        'Depot',
+                        new \DateTime(),
+                        $compteDestination->getId()
+                    );
+                    $this->transactionService->createTransaction($transactionEntree);
+                    
+                    $this->session->set('success', 'Dépôt par transfert effectué avec succès !');
+                    $this->redirect('/client/dashboard');
+                    return;
+                    
+                } catch (\Exception $e) {
+                    $this->session->set('general_error', $e->getMessage());
+                }
+            } else {
+                $this->session->set('field_errors', $validator->errors());
+            }
+        }
+        
+        $this->render('client/depot-transfert', array_merge($commonData, [
+            'old' => $_POST ?? []
+        ]));
     }
 }

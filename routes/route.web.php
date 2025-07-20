@@ -55,4 +55,10 @@ return [
         'middlewares' => ['auth'],
         'methods' => ['POST'],
     ],
+    'client/depot-transfert' => [
+        'controller' => App\Controllers\UserController::class,
+        'method' => 'depotTransfert',
+        'middlewares' => ['auth'],
+        'methods' => ['GET', 'POST'],
+    ],
 ];

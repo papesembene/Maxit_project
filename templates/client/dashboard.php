@@ -5,8 +5,9 @@
             <a href="/user/transactions" class="see-more">
                 Voir plus <i class="bi bi-arrow-right"></i>
             </a>
-            <a href="/user/depot" class="see-more" style="margin-left:16px; color:#ff8c00;">
-                <i class="bi bi-plus-circle"></i> Déposer
+          
+            <a href="/client/depot-transfert" class="see-more" style="margin-left:16px; color:#28a745;">
+                <i class="bi bi-arrow-right-circle"></i> Dépôt par transfert
             </a>
         </div>
 

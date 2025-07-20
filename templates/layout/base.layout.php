@@ -400,15 +400,11 @@
             <i class="bi bi-houses"></i>
             Home
         </a>
-        <button class="sidebar-button sidebar-link">
-            <i class="bi bi-chevron-down"></i>
-            Changer de compte
-        </button>
         
-        <button class="sidebar-button sidebar-link">
+        <a href="/client/create-account" class="sidebar-button sidebar-link">
             <i class="bi bi-plus"></i>
             Nouveau Compte
-        </button>
+        </a>
         <a href="/client/acountsList" class="sidebar-button sidebar-link">
             <i class="bi bi-list-check"></i>
             Voir mes Comptes
@@ -451,7 +447,7 @@
                 </div>
                 <div class="amount"> <?= htmlspecialchars($compte->getSolde()) ?> FCFA</div>
             </div>
-            <a href="#" class="balance-link">
+            <a href="/client/dashboard" class="balance-link">
                 Voir les transactions récentes <i class="bi bi-arrow-right"></i>
             </a>
         </div>

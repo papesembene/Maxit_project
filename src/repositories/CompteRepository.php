@@ -53,7 +53,9 @@ class CompteRepository extends AbstractRepository
         }
         return $comptes;
     }
-
+    /**
+     * Récupérer le compte principal d'un client
+     */
     public function getComptePrincipal(int $clientId): ?Compte
     {
         $stmt = $this->db->prepare("SELECT * FROM compte WHERE client_id = ? AND type = 'Principal'");
@@ -61,7 +63,9 @@ class CompteRepository extends AbstractRepository
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row ? $this->hydrate($row) : null;
     }
-
+    /**
+     * Récupérer les comptes secondaires d'un client
+     */
     public function getComptesSecondaires(int $clientId): array
     {
         $stmt = $this->db->prepare("SELECT * FROM compte WHERE client_id = ? AND type = 'Secondaire'");
@@ -72,7 +76,9 @@ class CompteRepository extends AbstractRepository
         }
         return $comptes;
     }
-
+    /**
+     * Sélectionner un compte par ID
+     */
     public function selectById($id): ?Compte
     {
         $stmt = $this->db->prepare("SELECT * FROM compte WHERE id = ?");
@@ -80,11 +86,24 @@ class CompteRepository extends AbstractRepository
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row ? $this->hydrate($row) : null;
     }
-
+    /**
+     * Mettre à jour le solde d'un compte
+     */
     public function updateSolde(int $compteId, float $nouveauSolde): bool
     {
         $stmt = $this->db->prepare("UPDATE compte SET solde = ? WHERE id = ?");
         return $stmt->execute([$nouveauSolde, $compteId]);
+    }
+
+    /**
+     * Trouver un compte par numéro de téléphone
+     */
+    public function findByTelephone(string $telephone): ?Compte
+    {
+        $stmt = $this->db->prepare("SELECT * FROM compte WHERE telephone = ?");
+        $stmt->execute([$telephone]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? $this->hydrate($row) : null;
     }
 
     /**
@@ -111,14 +130,18 @@ class CompteRepository extends AbstractRepository
             throw $e;
         }
     }
-
+    /**
+     * Hydrate un tableau de données en objet Compte
+     */
     private function hydrate(array $data): Compte
     {
         $compte = new Compte($data['id'],$data['solde'], $data['type'], $data['telephone']);
         $compte->setId($data['id']);
         return $compte;
     }
-
+    /**
+     * Compter le nombre de comptes dans la base de données
+     */
     public function count(): int
     {
         $stmt = $this->db->query("SELECT COUNT(*) FROM compte");

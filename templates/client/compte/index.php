@@ -61,9 +61,12 @@
                                 <?= htmlspecialchars(number_format($account->getSolde(), 0, ',', ' ')) ?>
                                 <span class="text-lg text-gray-600">FCFA</span>
                             </div>
-                            <button class="bg-orange-500 text-white px-3 py-1 rounded text-sm font-medium hover:bg-orange-600 transition">
-                                Définir comme principal
-                            </button>
+                            <form method="POST" action="/client/set-main-account" style="display: inline;">
+                                <input type="hidden" name="compte_id" value="<?= $account->getId() ?>">
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    Définir comme principal
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

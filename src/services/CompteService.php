@@ -63,8 +63,17 @@ class CompteService
     {
         return $this->compteRepository->isNumeroTelephoneUnique($numeroTelephone);
     }
+
     public function countComptes(): int
     {
         return $this->compteRepository->count();
+    }
+
+    /**
+     * Définir un compte comme principal
+     */
+    public function definirComptePrincipal(int $compteId, int $clientId): bool
+    {
+        return $this->compteRepository->setComptePrincipal($compteId, $clientId);
     }
 }

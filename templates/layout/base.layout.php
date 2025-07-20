@@ -391,11 +391,15 @@
                     <?= htmlspecialchars($user->getPrenom() . ' ' . $user->getNom()) ?>
                 </div>
                 <div class="profile-phone">
-                    <?= htmlspecialchars($compte->getNumeroTelephone()) ?>
+                    <?= htmlspecialchars($comptePrincipal->getNumeroTelephone()) ?>
                 </div>
             </div>
         </div>
-        
+        <a href="/client/dashboard" class="sidebar-button sidebar-link">
+            &nbsp;   
+            <i class="bi bi-houses"></i>
+            Home
+        </a>
         <button class="sidebar-button sidebar-link">
             <i class="bi bi-chevron-down"></i>
             Changer de compte
@@ -439,7 +443,7 @@
                     <i class="bi bi-arrow-up-right arrow"></i>
                     <i class="bi bi-arrow-down-left arrow"></i>
                 </div>
-                <div class="balance-type">Principal</div>
+                <div class="balance-type"><?= htmlspecialchars($compte->getTypeCompte()) ?></div>
             </div>
             <div class="balance-amount">
                 <div class="currency-icon">

@@ -45,7 +45,7 @@ class CompteRepository extends AbstractRepository
 
     public function getComptesByClientId(int $clientId): array
     {
-        $stmt = $this->db->prepare("SELECT * FROM compte WHERE client_id = ?");
+        $stmt = $this->db->prepare("SELECT * FROM compte WHERE client_id = ? ORDER BY type = 'Principal' DESC, id ASC");
         $stmt->execute([$clientId]);
         $comptes = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -85,6 +85,31 @@ class CompteRepository extends AbstractRepository
     {
         $stmt = $this->db->prepare("UPDATE compte SET solde = ? WHERE id = ?");
         return $stmt->execute([$nouveauSolde, $compteId]);
+    }
+
+    /**
+     * Définir un compte comme principal
+     */
+    public function setComptePrincipal(int $compteId, int $clientId): bool
+    {
+        try {
+            $this->db->beginTransaction();
+            
+            // 1. Mettre tous les comptes du client en "Secondaire"
+            $stmt1 = $this->db->prepare("UPDATE compte SET type = 'Secondaire' WHERE client_id = ?");
+            $stmt1->execute([$clientId]);
+            
+            // 2. Mettre le compte sélectionné en "Principal"
+            $stmt2 = $this->db->prepare("UPDATE compte SET type = 'Principal' WHERE id = ? AND client_id = ?");
+            $result = $stmt2->execute([$compteId, $clientId]);
+            
+            $this->db->commit();
+            return $result;
+            
+        } catch (\Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
     }
 
     private function hydrate(array $data): Compte

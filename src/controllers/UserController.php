@@ -13,7 +13,9 @@ use App\Entities\Compte;
 
 
 class UserController extends AbstractController
+  
 {
+
     private TransactionService $transactionService;
     private CompteService $compteService;
 
@@ -26,6 +28,24 @@ class UserController extends AbstractController
         $this->compteService = App::getDependencie('CompteService');
     }
 
+    /**
+     * Prépare les données communes pour tous les templates
+     */
+    private function prepareCommonData($userData): array
+    {
+        $user = $userData['user'];
+        $compteActuel = $userData['compte'];
+        
+        // Toujours récupérer le compte principal pour la sidebar
+        $comptePrincipal = $this->compteService->getComptePrincipal($user->getId());
+        
+        return [
+            'user' => $user,
+            'compte' => $compteActuel,
+            'comptePrincipal' => $comptePrincipal
+        ];
+    }
+
     public function index(): void
     {
         $userData = $this->session->get('user');
@@ -35,16 +55,12 @@ class UserController extends AbstractController
             return;
         }
         
-        $user = $userData['user']; 
-        $compte = $userData['compte']; 
+        $commonData = $this->prepareCommonData($userData);
+        $transactions = $this->transactionService->getLastTransactions($commonData['compte']->getId(), 10);
         
-        $transactions = $this->transactionService->getLastTransactions($compte->getId(), 10);
-        
-        $this->render('client/dashboard', [
-            'user' => $user,
-            'compte' => $compte,
+        $this->render('client/dashboard', array_merge($commonData, [
             'transactions' => $transactions
-        ]);
+        ]));
     }
 
     public function transactions(): void
@@ -56,21 +72,16 @@ class UserController extends AbstractController
             return;
         }
         
-        $user = $userData['user']; 
-        $compte = $userData['compte']; 
-        
-       
-        $allTransactions = $this->transactionService->getAllTransactions($compte->getId());
+        $commonData = $this->prepareCommonData($userData);
+        $allTransactions = $this->transactionService->getAllTransactions($commonData['compte']->getId());
         
       
         $result = Paginator::paginate($allTransactions, 6);
         
-        $this->render('client/transactions/transactions', [
-            'user' => $user,
-            'compte' => $compte,
+        $this->render('client/transactions/transactions', array_merge($commonData, [
             'transactions' => $result['items'],
             'pagination' => $result
-        ]);
+        ]));
     }
 
     public function nouveauCompte(): void
@@ -125,25 +136,86 @@ class UserController extends AbstractController
     public function acountsList()
     {
         $userData = $this->session->get('user');
-        $user = $userData['user'] ?? null;
-        $compte = $userData['compte'] ?? null;
-        $accounts = $this->compteService->getComptesSecondaires($user->getId());
-        $primaryaccount = $this->compteService->getComptePrincipal($user->getId());
+        if (!$userData) {
+            $this->redirect('/');
+            return;
+        }
+        
+        $commonData = $this->prepareCommonData($userData);
+        $user = $commonData['user'];
+        
+        // Récupérer tous les comptes
+        $allAccounts = $this->compteService->getTousLesComptes($user->getId());
+        $primaryAccount = null;
+        $secondaryAccounts = [];
+        
+        foreach ($allAccounts as $account) {
+            if ($account->getTypeCompte() === 'Principal') {
+                $primaryAccount = $account;
+            } else {
+                $secondaryAccounts[] = $account;
+            }
+        }
+        
         $totalAccounts = $this->compteService->countComptes();
-        $this->render("client/compte/index", [
-            'user' => $user,
-            'compte' => $compte,
-            'accounts' => $accounts,
-            'primaryaccount' => $primaryaccount,
+        
+        $this->render("client/compte/index", array_merge($commonData, [
+            'accounts' => $secondaryAccounts,
+            'primaryaccount' => $primaryAccount,
             'totalAccounts' => $totalAccounts
-        ]);
+        ]));
+    }
+
+    public function depot(): void
+    {
+        $userData = $this->session->get('user');
+        if (!$userData) {
+            $this->redirect('/');
+            return;
+        }
+        
+        $commonData = $this->prepareCommonData($userData);
+        $message = '';
+        $error = '';
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $montant = floatval($_POST['montant'] ?? 0);
+            if ($montant <= 0) {
+                $error = 'Le montant doit être supérieur à zéro.';
+            } else {
+                try {
+                    $transaction = new \App\Entities\Transaction(
+                        0,
+                        $montant,
+                        'Depot',
+                        new \DateTime(),
+                        $commonData['compte']->getId()
+                    );
+                    $this->transactionService->createTransaction($transaction);
+                    $commonData['compte']->setSolde($commonData['compte']->getSolde() + $montant);
+                    $this->compteService->updateSolde($commonData['compte']->getId(), $commonData['compte']->getSolde());
+                    $message = 'Dépôt effectué avec succès !';
+                } catch (\Exception $e) {
+                    $error = $e->getMessage();
+                }
+            }
+        }
+        $this->render('client/depot', array_merge($commonData, [
+            'message' => $message,
+            'error' => $error
+        ]));
     }
 
     public function createSecondaryAccount()
     {
         $userData = $this->session->get('user');
-        $user = $userData['user'] ?? null;
-        $compte = $userData['compte'] ?? null;
+        if (!$userData) {
+            $this->redirect('/');
+            return;
+        }
+        
+        $commonData = $this->prepareCommonData($userData);
+        
         if ($_SERVER['REQUEST_METHOD'] === 'POST') 
         {
            $rules = [
@@ -162,7 +234,7 @@ class UserController extends AbstractController
                     'Secondaire',
                     $_POST['telephone']
                   );
-                $account->setUser($user);
+                $account->setUser($commonData['user']);
                 $compte = $this->compteService->creerCompteSecondaire($account);
                     if ($compte) {
                         $this->session->set('success', 'Compte secondaire créé avec succès !');
@@ -175,12 +247,52 @@ class UserController extends AbstractController
                     die;
                 }
             }
-
         }
 
-        $this->render("client/compte/create", [
-            'user' => $user,
-            'compte' => $compte
-        ]);
+        $this->render("client/compte/create", $commonData);
+    }
+
+    public function setMainAccount()
+    {
+        $userData = $this->session->get('user');
+        if (!$userData) {
+            $this->redirect('/');
+            return;
+        }
+
+        $user = $userData['user'];
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') 
+        {
+            $compteId = $_POST['compte_id'] ?? null;
+
+            if (!$compteId) {
+                $this->session->set('general_error', 'ID du compte manquant');
+                $this->redirect('/client/acountsList');
+                return;
+            }
+
+            try {
+                $result = $this->compteService->definirComptePrincipal($compteId, $user->getId());
+                
+                if ($result) {
+                    $nouveauComptePrincipal = $this->compteService->getCompteById($compteId);
+                    if ($nouveauComptePrincipal) {
+                        $userData['compte'] = $nouveauComptePrincipal;
+                        $this->session->set('user', $userData);
+                    }
+                    
+                    $this->session->set('success', 'Compte principal défini avec succès !');
+                    $this->redirect('/client/acountsList');
+                    return;
+                } else {
+                    $this->session->set('general_error', 'Erreur lors de la définition du compte principal');
+                }
+            } catch (\Exception $e) {
+                $this->session->set('general_error', $e->getMessage());
+            }
+        }
+
+        $this->redirect('/client/acountsList');
     }
 }

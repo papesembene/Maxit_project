@@ -1,6 +1,11 @@
-
 <?php
 return [
+    'user/depot' => [
+        'controller' => App\Controllers\UserController::class,
+        'method' => 'depot',
+        'middlewares' => ['auth'],
+        'methods' => ['GET', 'POST'],
+    ],
     '/' => [
         'controller' => App\Controllers\SecurityController::class,
         'method' => 'login',
@@ -43,5 +48,11 @@ return [
         'middlewares' => ['auth'],
         'methods' => ['GET', 'POST'],
         
+    ],
+    '/client/set-main-account' => [
+        'controller' => App\Controllers\UserController::class,
+        'method' => 'setMainAccount',
+        'middlewares' => ['auth'],
+        'methods' => ['POST'],
     ],
 ];

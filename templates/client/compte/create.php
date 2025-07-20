@@ -1,5 +1,5 @@
 
-<a href="/client/compte" style="display: inline-flex; align-items: center; gap: 6px; color: #ff8c00; text-decoration: none; font-size: 1rem; font-weight: 500; margin-bottom: 24px;">
+<a href="/client/acountsList" style="display: inline-flex; align-items: center; gap: 6px; color: #ff8c00; text-decoration: none; font-size: 1rem; font-weight: 500; margin-bottom: 24px;">
             <i class="bi bi-arrow-left"></i> Retour à la liste des comptes
         </a>
 

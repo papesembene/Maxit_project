@@ -26,7 +26,7 @@
                 <label for="telephone_destination" style="font-weight: 500; color: #333;">Numéro de téléphone de destination <span style="color: red;">*</span></label>
                 <input type="text" id="telephone_destination" name="telephone_destination" 
                        value="<?= htmlspecialchars($old['telephone_destination'] ?? '') ?>"
-                       class="search-input" placeholder="Entrez le numéro de téléphone" required 
+                       class="search-input" placeholder="Entrez le numéro de téléphone"  
                        style="padding: 12px; border-radius: 8px; border: 1.5px solid #ff8c00; font-size: 1rem;">
                 <?php if (isset($this->session->get('field_errors')['telephone_destination'])): ?>
                     <span style="color: red; font-size: 0.875rem;">
@@ -39,7 +39,7 @@
                 <label for="montant" style="font-weight: 500; color: #333;">Montant <span style="color: red;">*</span></label>
                 <input type="number" id="montant" name="montant" 
                        value="<?= htmlspecialchars($old['montant'] ?? '') ?>"
-                       class="search-input" placeholder="Entrez le montant" required 
+                       class="search-input" placeholder="Entrez le montant"  
                        style="padding: 12px; border-radius: 8px; border: 1.5px solid #ff8c00; font-size: 1rem;">
                 <?php if (isset($this->session->get('field_errors')['montant'])): ?>
                     <span style="color: red; font-size: 0.875rem;">

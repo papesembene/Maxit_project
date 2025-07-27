@@ -7,7 +7,7 @@ use App\Core\Abstract\AbstractRepository;
 use PDO;
 use PDOException;
 
-class TransactionRepository extends AbstractRepository
+class TransactionRepository extends AbstractRepository implements ITransationRepository
 {
     private static ?TransactionRepository $instance = null;
     
@@ -19,18 +19,16 @@ class TransactionRepository extends AbstractRepository
     public static function getInstance(): TransactionRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new TransactionRepository();
+            self::$instance = new self();
         }
         return self::$instance;
     }
 
-    public function selectAll()
-    {
-        // Implementation pour sélectionner toutes les transactions
-    }
 
-    public function insert(Transaction $transaction): int
+    public function insert(object $entity): int
     {
+        /** @var Transaction $transaction */
+             $transaction = $entity;
         $sql = "INSERT INTO transaction (montant, type, compte_id) 
                 VALUES (:montant, :type, :compte_id)";
         
@@ -44,20 +42,7 @@ class TransactionRepository extends AbstractRepository
         return $this->db->lastInsertId();
     }
 
-    public function update()
-    {
-        // Implementation pour mettre à jour une transaction
-    }
-
-    public function delete()
-    {
-        // Implementation pour supprimer une transaction
-    }
-
-    public function selectById($id)
-    {
-        // Implementation pour sélectionner une transaction par ID
-    }
+    
 
     public function getLastTransactionsByCompte(int $compteId, int $limit = 10): array
     {

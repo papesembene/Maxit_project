@@ -146,6 +146,7 @@ class UserController extends AbstractController
         
         // Récupérer tous les comptes
         $allAccounts = $this->compteService->getTousLesComptes($user->getId());
+
         $primaryAccount = null;
         $secondaryAccounts = [];
         
@@ -159,7 +160,7 @@ class UserController extends AbstractController
         $result = Paginator::paginate($secondaryAccounts,2);
       
         
-        $totalAccounts = $this->compteService->countComptes();
+        $totalAccounts = count($allAccounts);
         
         $this->render("client/compte/index", array_merge($commonData, [
             'accounts' => $result['items'],
@@ -374,5 +375,11 @@ class UserController extends AbstractController
         $this->render('client/depot-transfert', array_merge($commonData, [
             'old' => $_POST ?? []
         ]));
+    }
+    public function show($params)
+    {
+        $id= $params['id'] ?? null;
+       var_dump($id);
+       die;
     }
 }

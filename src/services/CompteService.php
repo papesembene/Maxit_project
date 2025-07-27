@@ -64,9 +64,9 @@ class CompteService
         return $this->compteRepository->isNumeroTelephoneUnique($numeroTelephone);
     }
 
-    public function countComptes(): int
+    public function countComptes($id): int
     {
-        return $this->compteRepository->count();
+        return $this->compteRepository->count($id);
     }
 
     /**

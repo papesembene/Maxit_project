@@ -4,8 +4,46 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52bcfd1a3ccbbb13a605ea484409e7b1",
+    "content-hash": "32e96e9145824e85d312af7a68c4200d",
     "packages": [
+        {
+            "name": "ciara/core",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Kuronohangyakusha/coredcore.git",
+                "reference": "944f7cfc4a41c67dea57a8b80099aec12aa55f28"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Kuronohangyakusha/coredcore/zipball/944f7cfc4a41c67dea57a8b80099aec12aa55f28",
+                "reference": "944f7cfc4a41c67dea57a8b80099aec12aa55f28",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "App\\Core\\": "core/",
+                    "App\\Core\\Abstract\\": "core/abstract/",
+                    "App\\Core\\Middlewares\\": "core/middlewares/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "kuronohangyakusha",
+                    "email": "nndeyendiaye85@gmail.com"
+                }
+            ],
+            "keywords": [
+                "core"
+            ],
+            "support": {
+                "issues": "https://github.com/Kuronohangyakusha/coredcore/issues",
+                "source": "https://github.com/Kuronohangyakusha/coredcore/tree/1.0.0"
+            },
+            "time": "2025-07-23T10:34:19+00:00"
+        },
         {
             "name": "graham-campbell/result-type",
             "version": "v1.1.3",
@@ -70,16 +108,16 @@
         },
         {
             "name": "mrsems/router-php",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/papesembene/RouterDependency.git",
-                "reference": "01acd67d14d0ea52d31c6732cd12c4851d9f8910"
+                "reference": "8ff58ab560f9ce9b8fb9bfd091f525cdee2e9b29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/papesembene/RouterDependency/zipball/01acd67d14d0ea52d31c6732cd12c4851d9f8910",
-                "reference": "01acd67d14d0ea52d31c6732cd12c4851d9f8910",
+                "url": "https://api.github.com/repos/papesembene/RouterDependency/zipball/8ff58ab560f9ce9b8fb9bfd091f525cdee2e9b29",
+                "reference": "8ff58ab560f9ce9b8fb9bfd091f525cdee2e9b29",
                 "shasum": ""
             },
             "require": {
@@ -110,9 +148,9 @@
             ],
             "support": {
                 "issues": "https://github.com/papesembene/RouterDependency/issues",
-                "source": "https://github.com/papesembene/RouterDependency/tree/v1.0.0"
+                "source": "https://github.com/papesembene/RouterDependency/tree/v1.0.1"
             },
-            "time": "2025-07-18T09:42:10+00:00"
+            "time": "2025-07-21T22:44:56+00:00"
         },
         {
             "name": "phpoption/phpoption",

@@ -10,13 +10,15 @@ use App\Core\FileService;
 use App\Core\Validator;
 use App\Core\Session;
 use App\Core\App;
-use App\Services\SmsService;
+// use App\Services\SmsService;
+use App\Services\ISmsService;
+
 
 class SecurityController extends AbstractController
 {
     private SecurityService $securityService;
     private CompteRepository $compteRepository;
-    private SmsService $smsService;
+    private ISmsService $smsService;
 
     public function __construct()
     {
@@ -24,7 +26,8 @@ class SecurityController extends AbstractController
         $this->layout = 'security.layout.php';
         $this->compteRepository = App::getDependencie('CompteRepository');
         $this->securityService = App::getDependencie('SecurityService');
-        $this->smsService = new SmsService();
+        // $this->smsService = new SmsService();
+        $this->smsService = App::getDependencie('SmsService');
     }
 
     public function login()

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAXIT SA - Mon Espace Client</title>
     <script src="https://cdn.tailwindcss.com"></script>
+  
     <style>
         body {
             background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
@@ -52,6 +53,7 @@
     <div class="w-full max-w-4xl">
         <?php echo $content; ?>
     </div>
+    <script src="js/register.js"></script>
 
 </body>
 </html>

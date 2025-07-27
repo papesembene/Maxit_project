@@ -21,7 +21,13 @@
     "require": {
          "vlucas/phpdotenv": "^5.6",
         "twilio/sdk": "^8.6",
-        "mrsems/router-php": "^1.0"
+        "mrsems/router-php": "^1.0",
+        "ciara/core": "^1.0"
+      
+       
+       
+       
+       
     },
     "scripts": {
         "database:migrate": "php migration.php",

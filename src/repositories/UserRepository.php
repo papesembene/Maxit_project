@@ -11,7 +11,7 @@ use App\Core\App;
 use PDO;
 use PDOException;
 
-class UserRepository extends AbstractRepository
+class UserRepository extends AbstractRepository implements IUserRepository
 {
     private static ?UserRepository $userRepository = null;
     
@@ -28,13 +28,12 @@ class UserRepository extends AbstractRepository
         return self::$userRepository;
     }
 
-    public function selectAll()
-    {
-        // Implementation for selecting all users
-    }
+   
 
-    public function insert(User $utilisateur): int
+    public function insert(object $entity): int
     {
+        /** @var User $utilisateur */
+             $utilisateur = $entity;
         if (!$utilisateur instanceof User) 
         {
             throw new \InvalidArgumentException('User attendu');
@@ -56,20 +55,6 @@ class UserRepository extends AbstractRepository
         return $this->db->lastInsertId();
     }
 
-    public function update()
-    {
-        // Implementation for updating an existing user
-    }
-
-    public function delete()
-    {
-        // Implementation for deleting a user
-    }
-
-    public function selectById($id)
-    {
-        // Implementation for selecting a user by ID
-    }
 
     public function findUser(string $numero): ?array
     {

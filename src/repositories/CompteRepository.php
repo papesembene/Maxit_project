@@ -6,7 +6,7 @@ use App\Core\Abstract\AbstractRepository;
 use App\Core\Abstract\AbstractEntity;
 use PDO;
 
-class CompteRepository extends AbstractRepository
+class CompteRepository extends AbstractRepository implements ICompteRepository
 {
     private static ?CompteRepository $instance = null;
 
@@ -18,13 +18,15 @@ class CompteRepository extends AbstractRepository
     public static function getInstance(): CompteRepository
     {
         if (is_null(self::$instance)) {
-            self::$instance = new CompteRepository();
+            self::$instance = new self();
         }
         return self::$instance;
     }
 
-    public function insert(Compte $compte): int
+    public function insert(object $entity): int
     {
+        /** @var Compte $compte */
+             $compte = $entity;
         $sql = "INSERT INTO compte (telephone, solde, type, client_id) VALUES (?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
@@ -133,7 +135,7 @@ class CompteRepository extends AbstractRepository
     /**
      * Hydrate un tableau de données en objet Compte
      */
-    private function hydrate(array $data): Compte
+    public function hydrate(array $data): Compte
     {
         $compte = new Compte($data['id'],$data['solde'], $data['type'], $data['telephone']);
         $compte->setId($data['id']);
@@ -142,14 +144,12 @@ class CompteRepository extends AbstractRepository
     /**
      * Compter le nombre de comptes dans la base de données
      */
-    public function count(): int
+    public function count($id): int
     {
-        $stmt = $this->db->query("SELECT COUNT(*) FROM compte");
+        $stmt = $this->db->query("SELECT COUNT(*) FROM compte where id =$id");
         return (int) $stmt->fetchColumn();
     }
     
-    public function selectAll() {}
-    public function update() {}
-    public function delete() {}
+   
     public function isUnique(string $column, string $value): bool { return true; }
 }

@@ -3,7 +3,7 @@ namespace App\Services;
 
 use Twilio\Rest\Client;
 
-class SmsService
+class SmsService implements ISmsService
 {
     private string $sid;
     private string $token;

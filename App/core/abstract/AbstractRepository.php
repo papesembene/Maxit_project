@@ -3,15 +3,12 @@ namespace App\Core\Abstract;
 use App\Core\DataBase;
 use App\Entities\User;
 use App\Core\App;
+use App\Repositories\IRepository;
 
-abstract class AbstractRepository
+abstract class AbstractRepository 
 {
     protected  $db;
-    abstract public  function selectAll() ;
-   
-    abstract public function update() ;
-    abstract public function delete();
-    abstract public function selectById($id);
+  
     
     public function __construct()
     {
